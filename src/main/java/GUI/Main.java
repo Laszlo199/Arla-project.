@@ -26,6 +26,16 @@ public class Main extends Application {
         stage.getIcons().add(new Image(this.getClass().getResourceAsStream("/Icons/arla.png")));
         stage.setScene(scene);
         stage.show();
+
+        FXMLLoader loader1 = new FXMLLoader(getClass().getResource("/main.fxml"));
+        //  FXMLLoader loader = new FXMLLoader(getClass().getResource("/CreateNewScreen.fxml"));
+        Parent root1 = loader1.load();
+        Stage stage1 = new Stage();
+        stage1.setTitle("Arla");
+        Scene scene1 = new Scene(root1);
+        stage1.getIcons().add(new Image(this.getClass().getResourceAsStream("/Icons/arla.png")));
+        stage1.setScene(scene1);
+        stage1.show();
       //  openOther();
     }
 

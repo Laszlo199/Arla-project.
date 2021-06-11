@@ -99,6 +99,20 @@ public class Screen {
         this.refreshTime = refreshTime;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Screen screen = (Screen) o;
+
+        return id == screen.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return id;
+    }
 
     @Override
     public String toString() {

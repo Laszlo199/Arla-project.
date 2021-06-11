@@ -17,6 +17,7 @@ import javafx.collections.ObservableList;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.Executors;
@@ -72,7 +73,17 @@ public class ScreenModel implements IObservable {
                 List<Screen> addedScreens = logic.getNewScreens(newScreens, mainScreens);
                 mainScreens.addAll(addedScreens);
                 mainScreens.removeAll(deletedScreens);
-                screensToRefresh.removeAll(forgetAbout);
+                //screensToRefresh.removeAll(forgetAbout);
+                Iterator<Screen> iterator = screensToRefresh.iterator();
+
+                while(iterator.hasNext()) {
+                    Screen value = iterator.next();
+
+                    if(forgetAbout.contains(value)){
+                        iterator.remove();
+                    }
+                }
+
                 notifyManyObservers(addedScreens, deletedScreens);
                 
                 listenRefreshNow(screensToRefresh);
