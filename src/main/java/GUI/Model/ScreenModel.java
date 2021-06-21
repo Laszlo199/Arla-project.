@@ -16,7 +16,10 @@ import javafx.collections.ObservableList;
 
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -32,6 +35,9 @@ public class ScreenModel implements IObservable {
     private ObservableList<Screen> mainScreens;
     private ScheduledExecutorService executorService;
     private ScheduledExecutorService ex2;
+    //List<Screen> forgetAbout1 = new ArrayList<>();
+    //List<Screen> forgetAbout = Collections.synchronizedList(forgetAbout1);
+    private List<Screen> forgetAbout = new CopyOnWriteArrayList<>();
 
     public ObservableList<Screen> getMainScreens() {
         return mainScreens;
@@ -50,7 +56,7 @@ public class ScreenModel implements IObservable {
         loadMainScreens();
         StartObservatorThread();
     }
-    List<Screen> forgetAbout = new ArrayList<>();
+
 
     private void StartObservatorThread() {
         executorService = Executors.newSingleThreadScheduledExecutor();
@@ -67,10 +73,19 @@ public class ScreenModel implements IObservable {
                 List<Screen> addedScreens = logic.getNewScreens(newScreens, mainScreens);
                 mainScreens.addAll(addedScreens);
                 mainScreens.removeAll(deletedScreens);
-                screensToRefresh.removeAll(forgetAbout);
+                //screensToRefresh.removeAll(forgetAbout);
+                Iterator<Screen> iterator = screensToRefresh.iterator();
+
+                while(iterator.hasNext()) {
+                    Screen value = iterator.next();
+
+                    if(forgetAbout.contains(value)){
+                        iterator.remove();
+                    }
+                }
+
                 notifyManyObservers(addedScreens, deletedScreens);
-
-
+                
                 listenRefreshNow(screensToRefresh);
 
 
@@ -99,6 +114,7 @@ public class ScreenModel implements IObservable {
         }
        notifySingleObservers(modifiedScreens);
         notifyManyModified(modifiedScreens);
+        forgetAbout.addAll(modifiedScreens);
     }
 
 
@@ -194,7 +210,7 @@ public class ScreenModel implements IObservable {
 
     @Override
     public void notifySingleObservers(List<Screen> modified) {
-        forgetAbout.addAll(modified);
+        //forgetAbout.addAll(modified);
 
         for(ObserverSingle observerSingle : observersSingle){
             for(Screen mofidScreen: modified){
@@ -205,7 +221,7 @@ public class ScreenModel implements IObservable {
 
     @Override
     public void notifyManyModified(List<Screen> modified) {
-        forgetAbout.addAll(modified);
+       // forgetAbout.addAll(modified);
         for (ObserverMany observerMany : observersMany) {
             observerMany.updateModified( modified);
         }
