@@ -10,6 +10,10 @@ Project was made in close collaboration with Arla company. It was being develope
 It's an exam project for the 1st year of Computer Science course at Business Academy Southwest. The main objective was
 to provide functionality to show various data on muliple screens. 
 
+<p align="center">
+  <img  src="Documentation/Images/Screenshot.png">
+</p>
+
 ## Technologies
 Project is created with JavaFX. For the database side we used JDBC library. For unit tests we used JUnit library. 
 * javafx version: 15
